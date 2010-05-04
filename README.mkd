@@ -12,11 +12,11 @@ Twilog(http://twilog.org)から発言を取得する
 
     from twilog import twilog
     log = twilog.Twilog()
-    tweets = twilog.get_tweets(user='yono')
+    tweets = log.get_tweets(user='yono')
     for tweet in tweets:
         print tweet
 
     from datetime import date
-    aday_tweets = twilog.get_tweets(user='yono', aday=date(2010,4,1))
+    aday_tweets = log.get_tweets(user='yono', aday=date(2010,4,1))
     for tweet in aday_tweets:
         print tweet
