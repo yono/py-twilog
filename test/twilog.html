@@ -1,0 +1,419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>yono(@yono)/2010年05月04日 - Twilog</title>
+<link rel="alternate" type="application/rss+xml" title="yono(@yono) - Twilog" href="http://twilog.org/rss-feed/yono">
+
+<link rel="shortcut icon" href="http://twilog.org/image-dir/favicon.ico">
+<style type="text/css">
+body,h1,h2,h3,div,p,ul,li,img,table,td,form,input { margin:0; padding:0; }
+img { border:0; }
+
+li { list-style:none outside; }
+
+body { line-height:115%; background:#9ae4e8 url(http://s.twimg.com/a/1272578449/images/themes/theme1/bg.png) no-repeat fixed 0 0 ; color:#000000;  font-size:.95em; font-family: sans-serif; }
+#container { margin:0 auto; width:780px;  }
+#header { padding:1px 0 ; } 
+#main { width:523px; padding:20px; background-color:#fff; border-right:1px solid #87bc44; vertical-align:top; -webkit-border-top-left-radius:6px;-webkit-border-bottom-left-radius:6px; -moz-border-radius-topleft:6px;-moz-border-radius-bottomleft:6px;}
+#side { width:216px; padding:10px 0; background-color:#e0ff92; vertical-align:top;  -webkit-border-radius:6px; -moz-border-radius:6px;}
+#footer { background-color:#fff; margin:5px 0 15px; padding:10px; text-align:center; -webkit-border-radius:6px; -moz-border-radius:6px; }
+
+#pankuzu { font-size:.8em; padding:4px 8px 8px; width:508px; overflow:hidden; }
+#info { margin:5px 0; padding:5px 10px; border:2px solid #fc7; background-color:#ffc; }
+#order { font-size:.85em; margin:5px 0; padding:3px 7px; border:solid 1px #dde; background-color:#f0f8ff; }
+
+h2 { font-size:25px; margin:5px 0 10px; } 
+h2.bar2 { font-size:1em; border-bottom:1px solid #87bc44; background:url(http://twilog.org/image-dir/bar2.gif) no-repeat left 4px; padding:3px 0 3px 20px; } 
+h3.bar3 { font-size:.9em; border-left:5px solid #28c6ff; padding:2px 10px; margin-left:8px; }
+
+h3.bar-main { font-size:1.2em; margin:0px; padding:3px 10px; background-color:#e0ff92; border-top:1px solid #87bc44; border-bottom:1px solid #87bc44; }
+table.bar-main { width:523px; height:28px;background-color:#e0ff92; border-top:1px solid #87bc44; border-bottom:1px solid #87bc44; }
+table.bar-main h3 { font-size:1.1em; }
+table.bar-main td { padding:0 10px; }
+
+h3.bar-side { padding:3px 10px 0; }
+img.s-button { width:30px; height:16px; vertical-align:-3px; }
+
+div.tl-tweets { margin:0px 0px 6px; width:524px; line-height:115% }
+div.tl-tweet { padding:8px 5px;border-bottom:dashed 1px #ccc; }
+p.tl-text { font-size:1em;margin-bottom:3px; width:514px; overflow:hidden; }
+p.tl-posted {font-size:.8em;color:#aaa; }
+img.tl-image { margin:5px; border:0; }
+img.trash { width:10px;height:10px;margin-right:3px; }
+div.p-link { margin-bottom:20px; padding-right:5px; font-size:0.87em; text-align:right; }
+
+div.box1 { padding:8px; margin-bottom:10px; }
+div.box1 p { margin-bottom:1em; line-height:130%; }
+
+ul.user-info { width:503px; line-height:125%; overflow:hidden;padding:5px 10px;clear:all;font-size:.85em;background-color:#f5f5f5;margin-top:3px; border:1px solid #ccc;-webkit-border-radius:4px; -moz-border-radius:4px; }
+ul.user-info li { margin-bottom:2px;  }
+
+ul.list-main { padding:5px 12px; width:500px; overflow:hidden; }
+ul.list-side { padding:5px 16px; width:175px; overflow:hidden; }
+ul.list-side2 { padding:5px 16px; width:175px; overflow:hidden; }
+ul.list-side2 li { background:no-repeat left center; padding-left:20px; margin-bottom:5px; } 
+
+span.tl-link { font-size:11px; padding:0 2px; background-color:#3cf;color:#fff; }
+
+table.calender { width:190px; margin:0 auto 10px; text-align:center; border:1px solid #87bc44; background-color:#87bc44; }
+table.calender td { background-color:#fff; padding:2px;}
+table.calender th { background-color:#eee; padding:2px;}
+
+div.msg { padding:15px 25px 50px; }
+
+table#source { display:none;background-color:white;position:absolute;width:500px;height:300px;border:6px solid #87bc44; -webkit-border-radius:6px; -moz-border-radius:6px;}
+span.tweets-count { font-size:0.7em;color:#44f;background-color:#cff; padding:0 2px; border-bottom:1px solid #44f; }
+
+
+a:link { text-decoration:none; color:#0000ff;}
+a:visited { text-decoration:none; color:#0000ff;}
+a:hover { text-decoration:underline; color:#0000ff;}
+h3 a:link { text-decoration:none; color:#000000;}
+h3 a:visited { text-decoration:none; color:#000000;}
+h3 a:hover { text-decoration:underline; color:#000000;}
+
+</style>
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+<script type="text/javascript">
+google.load("jquery", "1.3");
+
+window.onload = function(){
+
+}
+
+function func(date,type){
+
+	$("#source").fadeOut("fast",function(){
+
+		$("#source-text").html("<img src='http://twilog.org/image-dir/ajax-loader.gif'>")
+	    wx = $().scrollLeft() + Math.floor(($(window).width() - $('#source').outerWidth()) / 2);
+	    wy = $().scrollTop() + Math.floor(($(window).height() - $('#source').outerHeight()) / 2);
+	    $("#source").css({ "top": wy, "left": wx }).fadeIn("fast");
+
+		$.ajax({
+			url : "http://twilog.org/source.cgi?id=yono&date="+date+"&order=desc&word=&cate=&filter=&type="+type,
+			success : get_source_success,
+			error : function(){
+				$("#source-text").html("<p>Error!!</p><a href='javascript:close()'>Close</a>");
+			}
+	
+		});
+	});
+}
+
+function get_source_success(src){
+
+	$("#source-text").html(src);
+
+}
+
+function close(){
+
+	$("#source").fadeOut("fast");
+
+}
+
+function user_search(){
+	var user_id = document.getElementById("user-id").value;
+	user_id = user_id.replace(/^[ ]+|[ ]+$/g, "");
+	if(user_id=="") {
+		alert("usernameを入力してください");
+		return;
+	}else if(!user_id.match(/^[a-zA-Z0-9_]+$/)) {
+		alert("不正なusernameです");
+		return;
+	}
+
+	location.href = "http://twilog.org/"+user_id;
+}
+
+
+</script>
+
+</head>
+
+<body>
+
+<div id="container">
+<div id="header">
+<div style="width:429px;padding:5px; float:left;margin-bottom:3px;">
+<h1><a href="http://twilog.org/"><img src="http://twilog.org/image-dir/logo.png" title="Twilog" alt="Twilog"></a></h1>
+</div>
+
+<div style="float:left;padding:5px 0;width:340px;text-align:center;">
+<div style="background-color:#fff;padding:5px 0px;border:solid 1px #ccc; -webkit-border-radius:6px; -moz-border-radius:6px; ">
+<div style="font-size:.85em; margin-bottom:3px;">
+<a href="http://twilog.org/">ホーム</a> | 
+
+<a href="http://twilog.org/about.cgi">当サイトについて</a> | 
+<a href="http://twilog.org/help.cgi">ヘルプ</a> | 
+<a href="http://twilog.org/about.cgi#author">運営者</a> | 
+<a href="http://twilog.org/settings.cgi">ログイン</a>
+
+
+</div>
+<div>
+<form action="http://twilog.org/tweets.cgi" method="get" onsubmit="user_search();return false;">
+<strong>username</strong> 
+
+<input type="text" id="user-id" name="id" value="yono" style="width:150px;border:2px solid #bbb;padding:1px;" onfocus="this.select()">
+<input type="submit" value="go!" style="background:url(http://twilog.org/image-dir/search-button.png);width:38px;height:22px; border:0;cursor:pointer;">
+</form>
+
+</div>
+
+
+
+</div>
+
+</div>
+<div style="clear:both;"></div>
+
+
+</div>
+
+<div style="background-color:#e0ff92;margin-bottom:15px; -webkit-border-radius:10px; -moz-border-radius:10px;">
+
+<table style="" cellspacing="0" cellpadding="0"><tr>
+<td id="main">
+
+<div style="padding-bottom:5px;">
+
+<div style="float:left; width:73px; ">
+<a href="http://twilog.org/yono"><img src="http://a1.twimg.com/profile_images/609469708/icon2_bigger.jpg" alt="yono" title="yono" border="0" style="width:73px;height:73px;"></a>
+</div>
+
+<div style="float:left;padding:5px 10px; width:420px; height:68px;">
+<h2>yono</h2>
+<p style="font-size:19px;">
+<a href="http://twitter.com/yono" target="_blank">yono</a><br>
+</p>
+
+</div>
+<div style="clear:both;"></div>
+
+<ul class="user-info">
+<li><span style="font-weight:bold;">Web</span> <a href="http://d.hatena.ne.jp/yono05/" target="_blank">http://d.hatena.ne.jp/yono05/</a></li><li><span style="font-weight:bold;">現在地</span> Okinawa, Japan</li><li><span style="font-weight:bold;">自己紹介</span> 音楽が大好物。</li>
+<li>
+<span style="font-weight:bold;">フォローしている</span> <a href="http://twitter.com/yono/following" target="_blank">683</a>　　
+
+<span style="font-weight:bold;">フォローされている</span> <a href="http://twitter.com/yono/followers" target="_blank">606</a>　　
+<span style="font-weight:bold;">投稿数</span> 17,045 （15.4件/日）
+</li>
+<li>
+<span style="font-weight:bold;">Twitter歴</span> 1,102日 （2007/04/29より）　　
+<img src="http://twilog.org/image-dir/chart.png" style="width:14px;height:14px; vertical-align:top ;margin-right:1px;">
+<a href="http://twilog.org/yono/stats">Twilog Stats</a>
+
+</li>
+
+</ul>
+
+<div id="order">
+<p><span style="font-weight:bold;color:#888">つぶやきの並び順</span> : <strong>新→古</strong> | <a href="http://twilog.org/yono/date-100504/asc">古→新</a>
+</p>
+<p><span style="font-weight:bold;color:#888">表示するつぶやき</span> : <strong>全て</strong> | <a href="http://twilog.org/yono/date-100504/norep" title="先頭に@のあるつぶやきを除く">Replyを除く</a> | <a href="http://twilog.org/yono/date-100504/nomen" title="文中に@のあるつぶやきを除く">Mentionを除く</a></p>
+
+</div>
+
+
+
+<div id="info" style="display:none;"></div>
+</div>
+
+<noscript>
+<div style="margin:5px 10px;color:#f00;">ソースの取得や「Twilog Stats」を利用する場合は、JavaScriptをONにしてください</div>
+</noscript>
+
+<div id="pankuzu">
+<a href="http://twilog.org/">Twilog ホーム</a>
+ &raquo; <a href="http://twilog.org/yono">@yono</a>
+
+ &raquo; <strong>2010年05月04日</strong>
+</div>
+
+
+<a name="100504"></a>
+<table class="bar-main" cellspacing="0"><tr>
+<td>
+<h3 class="bar-main2"><a href="http://twilog.org/yono/date-100504">2010年05月04日(火)</a> 
+<span class="tweets-count">3 tweets</span>
+</h3>
+</td>
+
+<td style="text-align:right;">
+<span style="font-size:.75em;">ソース取得：</span>
+<a href="javascript:func('100504','')"><img src="http://twilog.org/image-dir/s-button.png" class="s-button"></a>
+<a href="javascript:func('100504','ul')"><img src="http://twilog.org/image-dir/s-ul-button.png" class="s-button"></a>
+<a href="javascript:func('100504','p')"><img src="http://twilog.org/image-dir/s-p-button.png" class="s-button"></a>
+</div>
+</td>
+</tr></table>
+<div class="tl-tweets" id="d100504">
+<div class="tl-tweet"><p class="tl-text">彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っているしかなかった</p>
+<p class="tl-posted">posted at <a href="http://twitter.com/yono/status/13314425026" target="_blank">01:38:30</a></p></div>
+<div class="tl-tweet"><p class="tl-text">金曜の反省を踏まえて水をがぶ飲みしている</p>
+
+<p class="tl-posted">posted at <a href="http://twitter.com/yono/status/13314289572" target="_blank">01:35:31</a></p></div>
+<div class="tl-tweet"><p class="tl-text">飲みから帰宅中</p>
+<p class="tl-posted">posted at <a href="http://twitter.com/yono/status/13313553221" target="_blank">01:19:49</a></p></div>
+</div>
+<div class="p-link"><a href="http://twilog.org/yono/date-100504">Permalink - 2010年05月04日</a></div>
+<div style="padding:5px; text-align:center; font-size:.85em;">
+<a href="http://twilog.org/yono">@yonoホーム</a>　
+<a href="http://twilog.org/yono/date-100503">前の日 &raquo;</a>
+</div>
+
+<div style="font-size:13px; text-align:right;margin:5px;"><a href="#">▲ページトップへ戻る</a></div>
+
+</td>
+<td id="side">
+<form action="http://twilog.org/update.rb" method="get" style="padding:10px 5px 3px;text-align:center;">
+<input type="submit" id="ub" value="最新の情報に更新" style="background:url(http://twilog.org/image-dir/update-button.png);width:150px;height:30px; border:0;cursor:pointer;">
+<input type="hidden" name="id" value="yono">
+<input type="hidden" name="order" value="">
+<input type="hidden" name="filter" value="">
+<input type="hidden" name="kind" value="reg">
+</form>
+<div style="font-size:12px;margin-bottom:10px;text-align:center;">
+last update 05/04 12:38
+</div>
+
+
+<h3 class="bar-side">つぶやき検索</h3>
+<form action="http://twilog.org/tweets.cgi" method="get" style="padding:5px 7px; text-align:center;">
+<input type="hidden" name="id" value="yono">
+<input type="text" name="word" value="" style="width:130px; border:2px solid #ccc; padding:1px;">
+<input type="submit" value="検索" style="background:url(http://twilog.org/image-dir/search-button.png);width:38px;height:22px; border:0;cursor:pointer;">
+
+
+</form>
+
+
+<table style="width:150px;margin:10px auto 1px;text-align:center;font-weight:bold;"><tr><td style="width:20px;"><a href="http://twilog.org/yono/month-1004">&laquo;</a></td><td>2010年5月</td><td style="width:20px">&nbsp;</td></tr></table>
+<table class="calender" cellspacing="1">
+<tr><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th style="color:#33f;">土</th><th style="color:#f33;">日</th></tr>
+
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td><a href="http://twilog.org/yono/date-100501">1</a></td><td><a href="http://twilog.org/yono/date-100502">2</a></td></tr>
+<tr><td><a href="http://twilog.org/yono/date-100503">3</a></td><td style="font-weight:bold;background-color:#e0ff92"><a href="http://twilog.org/yono/date-100504">4</a></td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+<tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+
+<tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+<tr><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td></tr>
+<tr><td>31</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>
+
+<h3 class="bar-side">Recent</h3>
+<ul class="list-side">
+<li><strong>05月04日(火) </strong> (3)</li>
+<li><a href="http://twilog.org/yono/date-100503">05月03日(月) </a> (7)</li>
+<li><a href="http://twilog.org/yono/date-100502">05月02日(日) </a> (43)</li>
+<li><a href="http://twilog.org/yono/date-100501">05月01日(土) </a> (32)</li>
+
+<li><a href="http://twilog.org/yono/date-100430">04月30日(金) </a> (16)</li>
+<li><a href="http://twilog.org/yono/date-100429">04月29日(木) </a> (29)</li>
+<li><a href="http://twilog.org/yono/date-100428">04月28日(水) </a> (11)</li>
+<li><a href="http://twilog.org/yono/date-100427">04月27日(火) </a> (11)</li>
+<li><a href="http://twilog.org/yono/date-100426">04月26日(月) </a> (15)</li>
+
+<li><a href="http://twilog.org/yono/date-100425">04月25日(日) </a> (25)</li>
+
+</ul>
+
+
+<h3 class="bar-side">Archives</h3>
+<ul class="list-side">
+<li><a href="http://twilog.org/yono/month-1005">2010年05月</a> (<a href="http://twilog.org/yono/monthlist-1005">85</a>)</li>
+
+<li><a href="http://twilog.org/yono/month-1004">2010年04月</a> (<a href="http://twilog.org/yono/monthlist-1004">463</a>)</li>
+<li><a href="http://twilog.org/yono/month-1003">2010年03月</a> (<a href="http://twilog.org/yono/monthlist-1003">404</a>)</li>
+
+</ul>
+
+
+
+<h3 class="bar-side">Friends</h3>
+<ul class="list-side">
+<li><a href="http://twilog.org/yono/friends-gongoZ">@gongoZ</a> (31) </li>
+<li><a href="http://twilog.org/yono/friends-Tomohiro">@Tomohiro</a> (28) </li>
+<li><a href="http://twilog.org/yono/friends-codai_jp">@codai_jp</a> (24) <a href="http://twilog.org/codai_jp"><img src="http://twilog.org/image-dir/tl.png"></a></li>
+<li><a href="http://twilog.org/yono/friends-naltoma">@naltoma</a> (21) <a href="http://twilog.org/naltoma"><img src="http://twilog.org/image-dir/tl.png"></a></li>
+
+<li><a href="http://twilog.org/yono/friends-naotos">@naotos</a> (20) </li>
+<li><a href="http://twilog.org/yono/friends-Fire_Tom">@Fire_Tom</a> (12) <a href="http://twilog.org/Fire_Tom"><img src="http://twilog.org/image-dir/tl.png"></a></li>
+<li><a href="http://twilog.org/yono/friends-yabiku">@yabiku</a> (12) </li>
+<li><a href="http://twilog.org/yono/friends-yogi_kent">@yogi_kent</a> (11) </li>
+<li><a href="http://twilog.org/yono/friends-Kenta_Field">@Kenta_Field</a> (10) <a href="http://twilog.org/Kenta_Field"><img src="http://twilog.org/image-dir/tl.png"></a></li>
+
+<li><a href="http://twilog.org/yono/friends-yosshi1202">@yosshi1202</a> (10) </li>
+<li><a href="http://twilog.org/yono/friends-kotatsumikan">@kotatsumikan</a> (9) </li>
+<li><a href="http://twilog.org/yono/friends-Piga">@Piga</a> (9) </li>
+<li><a href="http://twilog.org/yono/friends-pipo2009">@pipo2009</a> (9) </li>
+<li><a href="http://twilog.org/yono/friends-yonobot">@yonobot</a> (8) </li>
+
+<li><a href="http://twilog.org/yono/friends-watermoon">@watermoon</a> (7) <a href="http://twilog.org/watermoon"><img src="http://twilog.org/image-dir/tl.png"></a></li>
+
+</ul>
+<p style="padding:3px 16px;"><a href="http://twilog.org/yono/friends">&raquo; 全てのFriendsを見る...</a></p>
+
+<h3 class="bar-side">Hashtags</h3>
+<ul class="list-side">
+<li><a href="http://twilog.org/yono/hashtags-ktchk">#ktchk</a> (1) </li>
+
+<li><a href="http://twilog.org/yono/hashtags-replies">#replies</a> (1) </li>
+
+</ul>
+<p style="padding:3px 16px;"><a href="http://twilog.org/yono/hashtags">&raquo; 全てのHashtagsを見る...</a></p>
+
+
+<h3 class="bar-side" style="margin-top:20px;">Stats・Feed</h3>
+<ul class="list-side2">
+<li style="background-image:url(http://twilog.org/image-dir/chart.png)">
+<a href="http://twilog.org/yono/stats">Twilog Stats</a>
+
+</li>
+
+
+<li style="background-image:url(http://twilog.org/image-dir/feed.png)">
+<a href="http://twilog.org/rss-feed/yono">RSS feed</a>
+</li>
+</ul>
+
+
+
+
+
+</td>
+</tr></table>
+
+</div>
+
+<div id="footer">
+&copy; 2010 <a href="http://www.ropross.net/" target="_blank">ropross.net</a>. 
+Created by <a href="http://twitter.com/ropross" target="_blank">@ropross</a> 
+<a href="http://www.ropross.net/" target="_blank"><img src="http://twilog.org/image-dir/ropross-group.gif" style="vertical-align:middle;width:149px;height:47px;" alt="ropross.net"></a>
+</div>
+
+</div>
+
+<table id="source">
+<tr><td id="source-text" style="text-align:center;">
+</td></tr></table>
+
+<script type="text/javascript" src="http://i.yimg.jp/images/analytics/js/ywa.js"></script>
+<script type="text/javascript">
+var YWATracker = YWA.getTracker("1000234412333");
+YWATracker.addExcludeProtocol("file:");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://by.analytics.yahoo.co.jp/p.pl?a=1000234412333&amp;js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+

@@ -1,0 +1,7 @@
+syntax: glob
+.DS_Store
+*.pyc
+twilog/*.pyc
+build/
+dist/
+twilog.egg-info
