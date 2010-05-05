@@ -17,6 +17,11 @@ Twilog(http://twilog.org)から発言を取得する
         print tweet
 
     from datetime import date
-    aday_tweets = log.get_tweets(user='yono', aday=date(2010,4,1))
+    aday_tweets = log.get_tweets(user='yono', start=date(2010,4,1))
     for tweet in aday_tweets:
+        print tweet
+
+    days_tweets = log.get_tweets(user='yono', start=date(2010,4,1),
+                                 end=date(2010,4,5))
+    for tweet in days_tweets:
         print tweet

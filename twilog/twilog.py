@@ -26,7 +26,26 @@ class Twilog(object):
         else:
             return url
 
-    def get_tweets(self, user, aday=''):
+    def get_tweets(self, user, start='', end=''):
+        results = []
+        if start == end == '':
+            results = self.get_tweets_from_web(user)
+        elif start == '' and end:
+            results = self.get_tweets_from_web(user, end)
+        elif start and end == '':
+            results = self.get_tweets_from_web(user, start)
+        else:
+            from_date, to_date = start, end            
+            if from_date > to_date:
+                from_date, to_date = to_date, from_date
+            current_date = from_date
+            while current_date <= to_date:
+                results.extend(self.get_tweets_from_web(user, current_date))
+                current_date += datetime.timedelta(days=1)
+
+        return results
+
+    def get_tweets_from_web(self, user, aday=''):
         url = self.get_url(user, aday)
         html = self.get_html(url)
         self.parser.sentences = []
@@ -79,7 +98,7 @@ if __name__ == '__main__':
 
     print '------ Today\'s Tweets ------'
 
-    tweets = log.get_tweets('yono',datetime.date.today())
+    tweets = log.get_tweets('yono',datetime.date.today(),datetime.date.today())
     for tweet in tweets:
         print tweet
 

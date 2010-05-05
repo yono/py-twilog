@@ -13,10 +13,19 @@ class TestTwilogParser(unittest.TestCase):
         html = open('test/twilog.html').read().decode('utf-8','ignore')
         self.parser.feed(html)
         tweets = self.parser.sentences
-        self.assert_(len(tweets), 3)
-        self.assert_(u'彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っているしかなかった', tweets[0])
-        self.assert_(u'金曜の反省を踏まえて水をがぶ飲みしている', tweets[1])
-        self.assert_(u'飲みから帰宅中', tweets[2])
+        end_tweets = [
+            u'ウィッシュリストが増えていくが減る見込みがない',
+            u'旅立つのは明日にしようかやっぱ',
+            u'ちょっと旅立ってくる',
+            u'休み長いから使わずに置いといてどっかで使いたい',
+            u'スパ4買おうかなぁ',
+            u'彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っているしかなかった',
+            u'金曜の反省を踏まえて水をがぶ飲みしている',
+            u'飲みから帰宅中',
+        ]
+        self.assert_(len(tweets), len(end_tweets))
+        for i in xrange(len(tweets)):
+            self.assert_(tweets[i], end_tweets[i])
 
 
 class TestTwilog(unittest.TestCase):
@@ -46,10 +55,53 @@ class TestTwilog(unittest.TestCase):
         self.assert_(self.log.format_date('10'), '10')
 
     def test_get_tweets(self):
-        tweets = self.log.get_tweets('yono',datetime.date(2010,5,4))
-        self.assert_(u'彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っているしかなかった', tweets[0])
-        self.assert_(u'金曜の反省を踏まえて水をがぶ飲みしている', tweets[1])
-        self.assert_(u'飲みから帰宅中', tweets[2])
+        start = datetime.date(2010,5,3)
+        end = datetime.date(2010,5,4)
+
+        start_tweets = [
+            u'ついったーの話とか出たけどスルー',
+            u'何もかも知らないふりしてる',
+            u'@blaugrana_apple そっか、まあ、会えたら会いましょう',
+            u'きたく',
+            u'まじでか。T.Tとか呼んだら来るんじゃね',
+            u'ふらふらしてたら飲みのお誘いが来たので一旦帰る',
+            u'おきた'
+        ]
+
+        end_tweets = [
+            u'ウィッシュリストが増えていくが減る見込みがない',
+            u'旅立つのは明日にしようかやっぱ',
+            u'ちょっと旅立ってくる',
+            u'休み長いから使わずに置いといてどっかで使いたい',
+            u'スパ4買おうかなぁ',
+            u'彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っているしかなかった',
+            u'金曜の反省を踏まえて水をがぶ飲みしている',
+            u'飲みから帰宅中',
+        ]
+
+        tweets = self.log.get_tweets('yono',start)
+        for i in xrange(len(tweets)):
+            self.assert_(tweets[i], start_tweets[i]) 
+
+        tweets = self.log.get_tweets('yono',start,end)
+        all_tweets = start_tweets + end_tweets
+        for i in xrange(len(tweets)):
+            self.assert_(tweets[i], all_tweets[i]) 
+
+    def test_get_tweets_from_web(self):
+        aday = datetime.date(2010,5,3)
+        start_tweets = [
+            u'ついったーの話とか出たけどスルー',
+            u'何もかも知らないふりしてる',
+            u'@blaugrana_apple そっか、まあ、会えたら会いましょう',
+            u'きたく',
+            u'まじでか。T.Tとか呼んだら来るんじゃね',
+            u'ふらふらしてたら飲みのお誘いが来たので一旦帰る',
+            u'おきた'
+        ]
+        tweets = self.log.get_tweets_from_web('yono',aday)
+        for i in xrange(len(tweets)):
+            self.assert_(tweets[i], start_tweets[i]) 
 
 if __name__ == '__main__':
     unittest.main()
