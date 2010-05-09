@@ -6,6 +6,7 @@ import time
 import urllib2
 import urlparse
 
+
 class Twilog(object):
 
     BASEURL = "http://twilog.org/"
@@ -16,13 +17,13 @@ class Twilog(object):
     def get_html(self, url):
         time.sleep(5)
         fp = urllib2.urlopen(url)
-        html = unicode(fp.read(),'utf-8','ignore')
+        html = unicode(fp.read(), 'utf-8', 'ignore')
         return html
 
     def get_url(self, user, aday=''):
-        url = self.BASEURL+user
+        url = self.BASEURL + user
         if aday:
-            return url+'/date-'+self.get_url_date(aday)
+            return url + '/date-' + self.get_url_date(aday)
         else:
             return url
 
@@ -35,7 +36,7 @@ class Twilog(object):
         elif start and end == '':
             results = self.get_tweets_from_web(user, start)
         else:
-            from_date, to_date = start, end            
+            from_date, to_date = start, end
             if from_date > to_date:
                 from_date, to_date = to_date, from_date
             current_date = from_date
@@ -70,7 +71,7 @@ class TwilogParser(HTMLParser):
         self.flag = False
         self.words = []
         self.sentences = []
-    
+
     def handle_starttag(self, tag, attrs):
         attrs_dic = dict(attrs)
 
@@ -98,7 +99,7 @@ if __name__ == '__main__':
 
     print '------ Today\'s Tweets ------'
 
-    tweets = log.get_tweets('yono',datetime.date.today(),datetime.date.today())
+    tweets = log.get_tweets('yono', datetime.date.today(),
+                            datetime.date.today())
     for tweet in tweets:
         print tweet
-
