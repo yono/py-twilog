@@ -4,13 +4,14 @@ import datetime
 import unittest
 from twilog import twilog
 
+
 class TestTwilogParser(unittest.TestCase):
 
     def setUp(self):
         self.parser = twilog.TwilogParser()
- 
+
     def test_feed(self):
-        html = open('test/twilog.html').read().decode('utf-8','ignore')
+        html = open('test/twilog.html').read().decode('utf-8', 'ignore')
         self.parser.feed(html)
         tweets = self.parser.sentences
         end_tweets = [
@@ -19,7 +20,8 @@ class TestTwilogParser(unittest.TestCase):
             u'ちょっと旅立ってくる',
             u'休み長いから使わずに置いといてどっかで使いたい',
             u'スパ4買おうかなぁ',
-            u'彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っているしかなかった',
+            u'彼女がどうとか結婚がどうとか話してて俺はにこにこと笑っている\
+                    しかなかった',
             u'金曜の反省を踏まえて水をがぶ飲みしている',
             u'飲みから帰宅中',
         ]
@@ -37,16 +39,17 @@ class TestTwilog(unittest.TestCase):
         html = self.log.get_html('http://twilog.org/yono/date-100504')
         file = open('test/twilog.html').read()
         self.assert_(html, file)
-    
+
     def test_get_url(self):
         url = self.log.get_url(user='yono')
         self.assert_(url, 'http://twilog.org/yono')
 
-        aday_url = self.log.get_url(user='yono',aday=datetime.date(2010,1,1))
+        aday_url = self.log.get_url(user='yono',
+                                    aday=datetime.date(2010, 1, 1))
         self.assert_(url, 'http://twilog.org/yono/date-100101')
 
     def test_get_url_date(self):
-        url_date = self.log.get_url_date(aday=datetime.date(2010,1,1))
+        url_date = self.log.get_url_date(aday=datetime.date(2010, 1, 1))
         self.assert_(url_date, '100101')
 
     def test_format_date(self):
@@ -55,8 +58,8 @@ class TestTwilog(unittest.TestCase):
         self.assert_(self.log.format_date('10'), '10')
 
     def test_get_tweets(self):
-        start = datetime.date(2010,5,3)
-        end = datetime.date(2010,5,4)
+        start = datetime.date(2010, 5, 3)
+        end = datetime.date(2010, 5, 4)
 
         start_tweets = [
             u'ついったーの話とか出たけどスルー',
@@ -65,7 +68,7 @@ class TestTwilog(unittest.TestCase):
             u'きたく',
             u'まじでか。T.Tとか呼んだら来るんじゃね',
             u'ふらふらしてたら飲みのお誘いが来たので一旦帰る',
-            u'おきた'
+            u'おきた',
         ]
 
         end_tweets = [
@@ -79,17 +82,17 @@ class TestTwilog(unittest.TestCase):
             u'飲みから帰宅中',
         ]
 
-        tweets = self.log.get_tweets('yono',start)
+        tweets = self.log.get_tweets('yono', start)
         for i in xrange(len(tweets)):
-            self.assert_(tweets[i], start_tweets[i]) 
+            self.assert_(tweets[i], start_tweets[i])
 
-        tweets = self.log.get_tweets('yono',start,end)
+        tweets = self.log.get_tweets('yono', start, end)
         all_tweets = start_tweets + end_tweets
         for i in xrange(len(tweets)):
-            self.assert_(tweets[i], all_tweets[i]) 
+            self.assert_(tweets[i], all_tweets[i])
 
     def test_get_tweets_from_web(self):
-        aday = datetime.date(2010,5,3)
+        aday = datetime.date(2010, 5, 3)
         start_tweets = [
             u'ついったーの話とか出たけどスルー',
             u'何もかも知らないふりしてる',
@@ -97,11 +100,11 @@ class TestTwilog(unittest.TestCase):
             u'きたく',
             u'まじでか。T.Tとか呼んだら来るんじゃね',
             u'ふらふらしてたら飲みのお誘いが来たので一旦帰る',
-            u'おきた'
+            u'おきた',
         ]
-        tweets = self.log.get_tweets_from_web('yono',aday)
+        tweets = self.log.get_tweets_from_web('yono', aday)
         for i in xrange(len(tweets)):
-            self.assert_(tweets[i], start_tweets[i]) 
+            self.assert_(tweets[i], start_tweets[i])
 
 if __name__ == '__main__':
     unittest.main()
