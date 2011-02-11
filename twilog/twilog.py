@@ -5,6 +5,7 @@ from HTMLParser import HTMLParser
 import time
 import urllib2
 import urlparse
+import re
 
 
 class Twilog(object):
@@ -27,24 +28,34 @@ class Twilog(object):
         else:
             return url
 
-    def get_tweets(self, user, start='', end=''):
+    def _get_tweets(self, user, start='', end=''):
         results = []
+        time_results = []
         if start == end == '':
-            results = self.get_tweets_from_web(user)
+            results, time_results = self.get_tweets_from_web(user)
         elif start == '' and end:
-            results = self.get_tweets_from_web(user, end)
+            results, time_results = self.get_tweets_from_web(user, end)
         elif start and end == '':
-            results = self.get_tweets_from_web(user, start)
+            results, time_results = self.get_tweets_from_web(user, start)
         else:
             from_date, to_date = start, end
             if from_date > to_date:
                 from_date, to_date = to_date, from_date
             current_date = from_date
             while current_date <= to_date:
-                results.extend(self.get_tweets_from_web(user, current_date))
+                tweets, times = self.get_tweets_from_web(user, current_date)
+                results.extend(tweets)
+                time_results.extend(times)
                 current_date += datetime.timedelta(days=1)
+        return (results, time_results)
 
-        return results
+    def get_tweets(self, user, start='', end=''):
+        tweets, time_results = self._get_tweets(user, start=start, end=end)
+        return tweets
+
+    def get_tweets_with_times(self, user, start='', end=''):
+        tweets, time_results = self._get_tweets(user, start=start, end=end)
+        return (tweets, time_results)
 
     def get_tweets_from_web(self, user, aday=''):
         url = self.get_url(user, aday)
@@ -52,7 +63,8 @@ class Twilog(object):
         self.parser.sentences = []
         self.parser.feed(html)
         tweets = self.parser.sentences
-        return tweets
+        times = self.parser.times
+        return (tweets, times)
 
     def get_url_date(self, aday):
         year = str(aday.year)[2:4]
@@ -69,8 +81,11 @@ class TwilogParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.flag = False
+        self.time_flag = False
         self.words = []
         self.sentences = []
+        self.times = []
+        self.is_times = re.compile(r"\d{2}:\d{2}:\d{2}")
 
     def handle_starttag(self, tag, attrs):
         attrs_dic = dict(attrs)
@@ -78,10 +93,14 @@ class TwilogParser(HTMLParser):
         if tag == 'p' and 'class' in attrs_dic:
             if attrs_dic['class'] == 'tl-text':
                 self.flag = True
+        if tag == 'a':
+            self.time_flag = True
 
     def handle_data(self, data):
         if self.flag:
             self.words.append(data)
+        if self.time_flag and self.is_times.match(data):
+            self.times.append(data)
 
     def handle_endtag(self, tag):
         if tag == 'p':
@@ -90,6 +109,8 @@ class TwilogParser(HTMLParser):
                 self.sentences.append(sentence)
             self.words = []
             self.flag = False
+        if tag == 'a':
+            self.time_flag = False
 
 if __name__ == '__main__':
     log = Twilog()
