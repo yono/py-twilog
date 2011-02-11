@@ -7,6 +7,13 @@ import urllib2
 import urlparse
 import re
 
+class Tweet(object):
+    text = None
+    date = None
+
+    def __init__(self, text, date):
+        self.text = text
+        self.date = date
 
 class Twilog(object):
 
@@ -26,7 +33,7 @@ class Twilog(object):
         if aday:
             return url + '/date-' + self.get_url_date(aday)
         else:
-            return url
+            return url + '/date-' + self.get_url_date(datetime.datetime.today())
 
     def _get_tweets(self, user, start='', end=''):
         results = []
@@ -53,9 +60,13 @@ class Twilog(object):
         tweets, time_results = self._get_tweets(user, start=start, end=end)
         return tweets
 
-    def get_tweets_with_times(self, user, start='', end=''):
+    def get_tweets_verbose(self, user, start='', end=''):
         tweets, time_results = self._get_tweets(user, start=start, end=end)
-        return (tweets, time_results)
+        i = 0
+        result = []
+        for i in xrange(len(tweets)):
+            result.append(Tweet(tweets[i], time_results[i]))
+        return result
 
     def get_tweets_from_web(self, user, aday=''):
         url = self.get_url(user, aday)
@@ -63,7 +74,14 @@ class Twilog(object):
         self.parser.sentences = []
         self.parser.feed(html)
         tweets = self.parser.sentences
-        times = self.parser.times
+        _times = self.parser.times
+        times = []
+        for _time in _times:
+            aday_obj = aday
+            if not aday:
+                aday_obj = datetime.datetime.today()
+            times.append(datetime.datetime(aday_obj.year, aday_obj.month, 
+                aday_obj.day, _time.hour, _time.month, _time.second))
         return (tweets, times)
 
     def get_url_date(self, aday):
@@ -100,7 +118,7 @@ class TwilogParser(HTMLParser):
         if self.flag:
             self.words.append(data)
         if self.time_flag and self.is_times.match(data):
-            self.times.append(data)
+            self.times.append(datetime.datetime.strptime(data, '%H:%M:%S'))
 
     def handle_endtag(self, tag):
         if tag == 'p':
