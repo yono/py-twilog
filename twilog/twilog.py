@@ -26,6 +26,7 @@ class Twilog(object):
         time.sleep(5)
         fp = urllib2.urlopen(url)
         html = unicode(fp.read(), 'utf-8', 'ignore')
+        #html = open('/Users/yono/Desktop/date-110212.html').read()
         return html
 
     def get_url(self, user, aday=''):
@@ -72,16 +73,17 @@ class Twilog(object):
         url = self.get_url(user, aday)
         html = self.get_html(url)
         self.parser.sentences = []
+        self.parser.times = []
         self.parser.feed(html)
         tweets = self.parser.sentences
         _times = self.parser.times
         times = []
         for _time in _times:
             aday_obj = aday
-            if not aday:
+            if aday == '':
                 aday_obj = datetime.datetime.today()
             times.append(datetime.datetime(aday_obj.year, aday_obj.month, 
-                aday_obj.day, _time.hour, _time.month, _time.second))
+                aday_obj.day, _time.hour, _time.minute, _time.second))
         return (tweets, times)
 
     def get_url_date(self, aday):
