@@ -8,6 +8,9 @@ import urlparse
 import re
 
 class Tweet(object):
+    """
+    つぶやき（post）を扱うクラス
+    """
     text = None
     date = None
 
@@ -16,6 +19,9 @@ class Tweet(object):
         self.date = date
 
 class Twilog(object):
+    """
+    Twilog を扱うクラス
+    """
 
     BASEURL = "http://twilog.org/"
 
@@ -26,15 +32,12 @@ class Twilog(object):
         time.sleep(5)
         fp = urllib2.urlopen(url)
         html = unicode(fp.read(), 'utf-8', 'ignore')
-        #html = open('/Users/yono/Desktop/date-110212.html').read()
         return html
 
     def get_url(self, user, aday=''):
         url = self.BASEURL + user
-        if aday:
-            return url + '/date-' + self.get_url_date(aday)
-        else:
-            return url + '/date-' + self.get_url_date(datetime.datetime.today())
+        target_date = aday if aday else datetime.datetime.today()
+        return url + '/date-' + self.get_url_date(target_date)
 
     def _get_tweets(self, user, start='', end=''):
         results = []
