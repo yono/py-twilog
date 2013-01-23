@@ -77,7 +77,10 @@ class Twilog(object):
         html = self.get_html(url)
         self.parser.sentences = []
         self.parser.times = []
-        self.parser.feed(html)
+        try: 
+            self.parser.feed(html)
+        except HTMLParserError:
+            pass
         tweets = self.parser.sentences
         _times = self.parser.times
         times = []
