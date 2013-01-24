@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import datetime
-from HTMLParser import HTMLParser
+from HTMLParser import HTMLParser, HTMLParseError
 import time
 import urllib2
 import urlparse
@@ -28,58 +28,58 @@ class Twilog(object):
     def __init__(self):
         self.parser = TwilogParser()
 
-    def get_html(self, url):
-        time.sleep(5)
-        fp = urllib2.urlopen(url)
-        html = unicode(fp.read(), 'utf-8', 'ignore')
-        return html
-
-    def get_url(self, user, aday=''):
-        url = self.BASEURL + user
-        target_date = aday if aday else datetime.datetime.today()
-        return url + '/date-' + self.get_url_date(target_date)
-
-    def _get_tweets(self, user, start='', end=''):
-        results = []
-        time_results = []
-        if start == end == '':
-            results, time_results = self.get_tweets_from_web(user)
-        elif start == '' and end:
-            results, time_results = self.get_tweets_from_web(user, end)
-        elif start and end == '':
-            results, time_results = self.get_tweets_from_web(user, start)
-        else:
-            from_date, to_date = start, end
-            if from_date > to_date:
-                from_date, to_date = to_date, from_date
-            current_date = from_date
-            while current_date <= to_date:
-                tweets, times = self.get_tweets_from_web(user, current_date)
-                results.extend(tweets)
-                time_results.extend(times)
-                current_date += datetime.timedelta(days=1)
-        return (results, time_results)
-
     def get_tweets(self, user, start='', end=''):
-        tweets, time_results = self._get_tweets(user, start=start, end=end)
+        tweets, time_results = self.__get_tweets(user, start=start, end=end)
         return tweets
 
     def get_tweets_verbose(self, user, start='', end=''):
-        tweets, time_results = self._get_tweets(user, start=start, end=end)
+        tweets, time_results = self.__get_tweets(user, start=start, end=end)
         i = 0
         result = []
         for i in xrange(len(tweets)):
             result.append(Tweet(tweets[i], time_results[i]))
         return result
 
-    def get_tweets_from_web(self, user, aday=''):
-        url = self.get_url(user, aday)
-        html = self.get_html(url)
+    def __to_html(self, url):
+        time.sleep(5)
+        fp = urllib2.urlopen(url)
+        html = unicode(fp.read(), 'utf-8', 'ignore')
+        return html
+
+    def __to_url(self, user, aday=''):
+        url = self.BASEURL + user
+        target_date = aday if aday else datetime.datetime.today()
+        return url + '/date-' + self.__to_url_date(target_date)
+
+    def __get_tweets(self, user, start='', end=''):
+        results = []
+        time_results = []
+        if start == end == '':
+            results, time_results = self.__download_tweets(user)
+        elif start == '' and end:
+            results, time_results = self.__download_tweets(user, end)
+        elif start and end == '':
+            results, time_results = self.__download_tweets(user, start)
+        else:
+            from_date, to_date = start, end
+            if from_date > to_date:
+                from_date, to_date = to_date, from_date
+            current_date = from_date
+            while current_date <= to_date:
+                tweets, times = self.__download_tweets(user, current_date)
+                results.extend(tweets)
+                time_results.extend(times)
+                current_date += datetime.timedelta(days=1)
+        return (results, time_results)
+
+    def __download_tweets(self, user, aday=''):
+        url = self.__to_url(user, aday)
+        html = self.__to_html(url)
         self.parser.sentences = []
         self.parser.times = []
         try: 
             self.parser.feed(html)
-        except HTMLParserError:
+        except HTMLParseError:
             pass
         tweets = self.parser.sentences
         _times = self.parser.times
@@ -92,13 +92,13 @@ class Twilog(object):
                 aday_obj.day, _time.hour, _time.minute, _time.second))
         return (tweets, times)
 
-    def get_url_date(self, aday):
+    def __to_url_date(self, aday):
         year = str(aday.year)[2:4]
-        month = self.format_date(str(aday.month))
-        day = self.format_date(str(aday.day))
+        month = self.__format_date(str(aday.month))
+        day = self.__format_date(str(aday.day))
         return "%s%s%s" % (year, month, day)
 
-    def format_date(self, date):
+    def __format_date(self, date):
         return date if len(date) == 2 else "0%s" % (date)
 
 

@@ -35,27 +35,27 @@ class TestTwilog(unittest.TestCase):
     def setUp(self):
         self.log = twilog.Twilog()
 
-    def test_get_html(self):
-        html = self.log.get_html('http://twilog.org/yono/date-100504')
+    def test_to_html(self):
+        html = self.log._Twilog__to_html('http://twilog.org/yono/date-100504')
         file = open('test/twilog.html').read()
         self.assert_(html, file)
 
-    def test_get_url(self):
-        url = self.log.get_url(user='yono')
+    def test_to_url(self):
+        url = self.log._Twilog__to_url(user='yono')
         self.assert_(url, 'http://twilog.org/yono')
 
-        aday_url = self.log.get_url(user='yono',
+        aday_url = self.log._Twilog__to_url(user='yono',
                                     aday=datetime.date(2010, 1, 1))
         self.assert_(url, 'http://twilog.org/yono/date-100101')
 
-    def test_get_url_date(self):
-        url_date = self.log.get_url_date(aday=datetime.date(2010, 1, 1))
+    def test_to_url_date(self):
+        url_date = self.log._Twilog__to_url_date(aday=datetime.date(2010, 1, 1))
         self.assert_(url_date, '100101')
 
     def test_format_date(self):
-        self.assert_(self.log.format_date('0'), '00')
-        self.assert_(self.log.format_date('9'), '09')
-        self.assert_(self.log.format_date('10'), '10')
+        self.assert_(self.log._Twilog__format_date('0'), '00')
+        self.assert_(self.log._Twilog__format_date('9'), '09')
+        self.assert_(self.log._Twilog__format_date('10'), '10')
 
     def test_get_tweets(self):
         start = datetime.date(2010, 5, 3)
@@ -91,7 +91,7 @@ class TestTwilog(unittest.TestCase):
         for i in xrange(len(tweets)):
             self.assert_(tweets[i], all_tweets[i])
 
-    def test_get_tweets_from_web(self):
+    def test_download_tweets(self):
         aday = datetime.date(2010, 5, 3)
         start_tweets = [
             u'ついったーの話とか出たけどスルー',
@@ -102,7 +102,7 @@ class TestTwilog(unittest.TestCase):
             u'ふらふらしてたら飲みのお誘いが来たので一旦帰る',
             u'おきた',
         ]
-        tweets = self.log.get_tweets_from_web('yono', aday)
+        tweets = self.log._Twilog__download_tweets('yono', aday)
         for i in xrange(len(tweets)):
             self.assert_(tweets[i], start_tweets[i])
 
