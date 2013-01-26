@@ -1,6 +1,6 @@
 # twilog
 
-Twilog(http://twilog.org)から発言を取得する
+py-twilog downloads tweets from http://twilog.org
 
 ## Install
 
@@ -12,21 +12,25 @@ Twilog(http://twilog.org)から発言を取得する
 
     from twilog import twilog
     log = twilog.Twilog()
+
+    # download today's tweets
     tweets = log.get_tweets(user='yono')
     for tweet in tweets:
         print tweet
 
+    # download tweets at 2010/04/01
     from datetime import date
     aday_tweets = log.get_tweets(user='yono', start=date(2010,4,1))
     for tweet in aday_tweets:
         print tweet
 
+    # download tweets from 2010/04/01 to 2010/04/05
     days_tweets = log.get_tweets(user='yono', start=date(2010,4,1),
                                  end=date(2010,4,5))
     for tweet in days_tweets:
         print tweet
 
-    # get tweet and datetime
+    # download tweets and datetime
     tweets = log.get_tweets_verbose(user='yono')
     for tweet in tweets:
         print tweet.text, tweet.date
